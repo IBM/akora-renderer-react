@@ -14,15 +14,6 @@ lib-cov
 # Coverage directory used by tools like istanbul
 coverage
 
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
-
-# node-waf configuration
-.lock-wscript
-
-# Compiled binary addons (http://nodejs.org/api/addons.html)
-build/Release
-
 # Dependency directory
 node_modules
 
@@ -32,7 +23,6 @@ node_modules
 dist
 test-results
 static-analysis-reports
-deploy.py
 
 docs
 reports
@@ -41,3 +31,6 @@ reports
 # Editor temporary files
 .*.swp
 /.project
+
+# Parcel cache
+.parcel-cache/

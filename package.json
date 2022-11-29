@@ -1,23 +1,24 @@
 {
-  "name": "@hdm/akora-renderer-react",
-  "version": "3.0.0",
+  "name": "akora-renderer-react",
+  "version": "1.0.0",
   "description": "Akora renderer for React components",
+  "source": "lib/index.js",
   "main": "dist/akora-renderer-react.cjs.js",
   "module": "dist/akora-renderer-react.esm.js",
   "browser": "dist/akora-renderer-react.umd.js",
   "scripts": {
-    "build": "rollup -c",
-    "watch": "rollup -c -w",
+    "build": "npm-run-all clean build:parcel",
     "build-docs": "jsdoc --configure jsdoc.conf.json",
+    "build:parcel": "parcel build",
+    "clean": "rimraf dist",
     "lint": "eslint ./lib",
-    "lint:js:fix": "eslint --fix --ext js --ext jsx ./lib",
     "lint:ci": "eslint --format checkstyle -o reports/static-analysis/eslint.xml ./lib",
-    "pretest": "NODE_ENV=test npm run build",
-    "pretest:ci": "NODE_ENV=test npm run build",
+    "lint:fix": "eslint --fix --ext js --ext jsx ./lib",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:ci": "jest --ci --no-cache --coverage --coverageDirectory=reports/unit-test/jest --testResultsProcessor=\"jest-junit\" --verbose",
-    "test:watch": "jest --watch --coverage"
+    "test:watch": "jest --watch --coverage",
+    "watch": "parcel watch"
   },
   "jest-junit": {
     "outputDirectory": "reports/unit-test/junit/",
@@ -27,12 +28,9 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git@github.ibm.com:hdm/akora-renderer-react.git"
+    "url": "git@github.com:IBM/akora-renderer-react.git"
   },
   "author": "joshua.suckling@uk.ibm.com",
-  "bugs": {
-    "url": "https://github.ibm.com/hdm/tracking/issues"
-  },
   "files": [
     "dist"
   ],
@@ -41,11 +39,6 @@
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
-    "@hdm/eslint-config": "^3.0.6",
-    "@rollup/plugin-babel": "^6.0.3",
-    "@rollup/plugin-commonjs": "^23.0.3",
-    "@rollup/plugin-eslint": "^9.0.1",
-    "@rollup/plugin-node-resolve": "^15.0.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/react-hooks": "^8.0.1",
@@ -65,14 +58,12 @@
     "minami": "^1.2.3",
     "nodemon": "^2.0.20",
     "npm-run-all": "^4.1.5",
+    "parcel": "^2.8.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-test-renderer": "^18.2.0",
-    "rollup": "^3.5.0",
-    "rollup-plugin-istanbul": "^4.0.0",
-    "rollup-pluginutils": "^2.8.2",
-    "rollup-watch": "^4.3.1"
+    "rimraf": "^3.0.2"
   },
   "peerDependencies": {
     "prop-types": "^15.8.1",
