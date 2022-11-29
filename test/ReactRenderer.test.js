@@ -2,8 +2,7 @@
  * Copyright 2022- IBM Inc. All rights reserved
  * SPDX-License-Identifier: Apache2.0
  */
-import getReactRenderer         from '../dist/akora-renderer-react.cjs';
-import {JSDOM}                  from 'jsdom';
+import getReactRenderer         from '../lib/ReactRenderer';
 import DummyComponent           from './resources/DummyComponent';
 import DummyComponentAlternate  from './resources/DummyComponentAlternate';
 import React                    from 'react';
@@ -42,8 +41,8 @@ describe('ReactRenderer', () => {
   });
 
   it('should be able to create from an element', () => {
-    const dom = new JSDOM('<div></div>');
-    const divElem = dom.window.document.querySelector('div');
+    document.body.innerHTML = '<div></div>';
+    const divElem = document.querySelector('div');
 
     const myRenderer = new ReactRenderer(divElem);
 
@@ -51,8 +50,8 @@ describe('ReactRenderer', () => {
   });
 
   it('should be able to set state', () => {
-    const dom = new JSDOM('<div></div>');
-    const divElem = dom.window.document.querySelector('div');
+     document.body.innerHTML = '<div></div>';
+    const divElem = document.querySelector('div');
 
     const myRenderer = new ReactRenderer(divElem);
     const state = {
@@ -69,9 +68,8 @@ describe('ReactRenderer', () => {
   });
 
   it('should render', (done) => {
-    const dom = new JSDOM('<div></div>');
-    global.window = dom.window;
-    const divElem = dom.window.document.querySelector('div');
+    document.body.innerHTML = '<div></div>';
+    const divElem = document.querySelector('div');
 
     const myRenderer = new ReactRenderer(divElem);
     const state = {
@@ -94,9 +92,8 @@ describe('ReactRenderer', () => {
   });
 
   it('should destroy a rendered component', (done) => {
-    const dom = new JSDOM('<div></div>');
-    global.window = dom.window;
-    const divElem = dom.window.document.querySelector('div');
+    document.body.innerHTML = '<div></div>';
+    const divElem = document.querySelector('div');
 
     const myRenderer = new ReactRenderer(divElem);
     const state = {
@@ -121,10 +118,8 @@ describe('ReactRenderer', () => {
   });
 
   it('should render a loading spinner THEN a component', (done) => {
-    const dom = new JSDOM('<div></div>');
-    global.window = dom.window;
-    const doc = dom.window.document;
-    const divElem = doc.querySelector('div');
+    document.body.innerHTML = '<div></div>';
+    const divElem = document.querySelector('div');
 
     const myRenderer = new ReactRenderer(divElem);
     const state = {
@@ -155,10 +150,8 @@ describe('ReactRenderer', () => {
   });
 
   it('should attempt to render two components simultaneously', (done) => {
-    const dom = new JSDOM('<div></div>');
-    global.window = dom.window;
-    const doc = dom.window.document;
-    const divElem = doc.querySelector('div');
+    document.body.innerHTML = '<div></div>';
+    const divElem = document.querySelector('div');
 
     const myRenderer = new ReactRenderer(divElem);
     const state = {
