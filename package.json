@@ -24,8 +24,6 @@
     "outputDirectory": "reports/unit-test/junit/",
     "usePathForSuiteName": "true"
   },
-  "sideEffects": false,
-  "private": true,
   "repository": {
     "type": "git",
     "url": "git@github.com:IBM/akora-renderer-react.git"
