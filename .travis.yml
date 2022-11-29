@@ -1,7 +1,14 @@
 language: node_js
-before_install:
-  - sudo add-apt-repository -y ppa:deadsnakes/ppa
-  - sudo apt update -y
-  - sudo apt-get install -y python3
+addons:
+  apt:
+    sources:
+      - deadsnakes # source required so it finds the package definition below
+    packages:
+      - python3.6
+
+# before_install:
+  # - sudo add-apt-repository -y ppa:deadsnakes/ppa
+  # - sudo apt update -y
+  # - sudo apt-get install -y python3
 install:
   - npm ci --legacy-peer-deps
