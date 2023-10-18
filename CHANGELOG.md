@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/IBM/akora-renderer-react/compare/v1.0.0...v1.0.1) (2023-10-18)
+
+
+### Bug Fixes
+
+* **build:** use default pkg root ([1abd734](https://github.com/IBM/akora-renderer-react/commit/1abd734e5109f87fb63dccdf0f1a4919c6142612))
+
 # 1.0.0 (2023-10-18)
 
 
