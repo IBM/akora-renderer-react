@@ -1,0 +1,26 @@
+language: node_js
+
+dist: jammy
+
+node_js:
+- 18
+
+cache:
+  npm: false
+
+before_install:
+  - npm i -g npm@8
+  - npm --version
+
+script:
+- npm run build
+- npm run lint:ci
+- npm run test:ci
+
+deploy:
+- provider: script
+  skip_cleanup: true
+  script: npx semantic-release
+  on:
+    node: 18
+    branch: main

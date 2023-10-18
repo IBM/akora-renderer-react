@@ -1,0 +1,28 @@
+{
+  "extends": "plugin:react/recommended",
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile" : "false",
+    "babelOptions": {
+      "configFile": "./.babelrc.js"
+    }
+  },
+  "env": {
+    "jest": true
+  },
+  "plugins": ["notice"],
+  "rules": {
+    "notice/notice": [
+      "error",
+      {
+        "templateFile": "config/copyright.js"
+      }
+    ],
+    "react/no-deprecated": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}
