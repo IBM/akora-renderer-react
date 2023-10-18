@@ -14,10 +14,7 @@
   ],
   "publish": [
     [
-      "@semantic-release/npm",
-      {
-        "pkgRoot": "dist"
-      }
+      "@semantic-release/npm"
     ],
     {
       "path": "@semantic-release/github"
