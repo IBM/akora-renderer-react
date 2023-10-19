@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/IBM/akora-renderer-react/compare/v1.0.2...v1.0.3) (2023-10-19)
+
+
+### Bug Fixes
+
+* **build:** publish first package ([725043c](https://github.com/IBM/akora-renderer-react/commit/725043c570d8db8d84dfd8745a970e7c583ca180))
+
 ## [1.0.2](https://github.com/IBM/akora-renderer-react/compare/v1.0.1...v1.0.2) (2023-10-19)
 
 
