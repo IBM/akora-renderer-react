@@ -1,6 +1,6 @@
 {
   "name": "@ibm/akora-renderer-react",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "React renderer tool for Cloud Pak for AIOps dashboard integration.",
   "main": "dist/akora-renderer-react.cjs.js",
   "module": "dist/akora-renderer-react.esm.js",
