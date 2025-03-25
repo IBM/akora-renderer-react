@@ -65,6 +65,8 @@ export default (React, AkoraContext) => class Region extends React.Component {
   }
 
   destroyRegion() {
-    this.context.app.destroyRegionByElement(this.region.element);
+    if (this.context.app.createdRegions.has(this.region.element)) {
+      this.context.app.destroyRegionByElement(this.region.element);
+    }
   }
 };
