@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/IBM/akora-renderer-react/compare/v1.0.3...v1.0.4) (2025-03-27)
+
+
+### Bug Fixes
+
+* **merge:** Merge pull request [#2](https://github.com/IBM/akora-renderer-react/issues/2) from IBM/js-update-to-react18 ([ab94627](https://github.com/IBM/akora-renderer-react/commit/ab94627f4f92f49d0d1e7fb6a04a594020168b84))
+
 ## [1.0.3](https://github.com/IBM/akora-renderer-react/compare/v1.0.2...v1.0.3) (2023-10-19)
 
 
