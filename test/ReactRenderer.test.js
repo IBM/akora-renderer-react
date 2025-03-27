@@ -8,35 +8,35 @@ import {JSDOM}                  from 'jsdom';
 import DummyComponent           from './resources/DummyComponent';
 import DummyComponentAlternate  from './resources/DummyComponentAlternate';
 import React                    from 'react';
-import ReactDOM                 from 'react-dom';
+import ReactDOMClient             from 'react-dom/client';
 import 'core-js';
 
-const ReactRenderer = getReactRenderer(React, ReactDOM);
+const ReactRenderer = getReactRenderer(React, ReactDOMClient);
 
 describe('ReactRenderer', () => {
   it('should return the same renderer for the same version of react', () => {
-    const r1 = getReactRenderer(React, ReactDOM);
-    const r2 = getReactRenderer(React, ReactDOM);
+    const r1 = getReactRenderer(React, ReactDOMClient);
+    const r2 = getReactRenderer(React, ReactDOMClient);
 
     expect(r1).toEqual(r2);
   });
 
   it('should return a different renderer for the same version of react but different react DOM', () => {
-    const r1 = getReactRenderer(React, ReactDOM);
+    const r1 = getReactRenderer(React, ReactDOMClient);
     const r2 = getReactRenderer(React, {});
 
     expect(r1).not.toEqual(r2);
   });
 
   it('should return a different renderer for the same version of react DOM but different react', () => {
-    const r1 = getReactRenderer(React, ReactDOM);
-    const r2 = getReactRenderer({Component: class { }, createContext: () => { }}, ReactDOM);
+    const r1 = getReactRenderer(React, ReactDOMClient);
+    const r2 = getReactRenderer({Component: class { }, createContext: () => { }}, ReactDOMClient);
 
     expect(r1).not.toEqual(r2);
   });
 
   it('should return a different renderer for different versions of react and react dom', () => {
-    const r1 = getReactRenderer(React, ReactDOM);
+    const r1 = getReactRenderer(React, ReactDOMClient);
     const r2 = getReactRenderer({Component: class { }, createContext: () => { }}, {});
 
     expect(r1).not.toEqual(r2);
@@ -71,7 +71,7 @@ describe('ReactRenderer', () => {
 
   it('should render', (done) => {
     const dom = new JSDOM('<div></div>');
-    global.window ??= Object.create(dom.window);
+    global.window = dom.window;
     const divElem = dom.window.document.querySelector('div');
 
     const myRenderer = new ReactRenderer(divElem);
@@ -96,7 +96,7 @@ describe('ReactRenderer', () => {
 
   it('should destroy a rendered component', (done) => {
     const dom = new JSDOM('<div></div>');
-    global.window ??= Object.create(dom.window);
+    global.window = dom.window;
     const divElem = dom.window.document.querySelector('div');
 
     const myRenderer = new ReactRenderer(divElem);
@@ -108,7 +108,7 @@ describe('ReactRenderer', () => {
       stateToPropMapper: () => ({})
     };
     myRenderer.setState(null, state);
-    const unmountComponentAtNodeSpy = jest.spyOn(ReactDOM, 'unmountComponentAtNode');
+    const unmountComponentAtNodeSpy = jest.spyOn(myRenderer.root, 'unmount');
 
     myRenderer.render();
     expect(myRenderer.isActive).toBe(true);
@@ -121,9 +121,20 @@ describe('ReactRenderer', () => {
     });
   });
 
-  it('should render a loading spinner THEN a component', (done) => {
+  const waitForComponent = async (element, className) => {
+    return new Promise((resolve) => {
+      const intervalTimer = setInterval(() => {
+        if (element.querySelector(className)) {
+          clearInterval(intervalTimer);
+          resolve();
+        }
+      }, 100);
+    });
+  };
+
+  it('should render a loading spinner THEN a component', async () => {
     const dom = new JSDOM('<div></div>');
-    global.window ??= Object.create(dom.window);
+    global.window = dom.window;
     const doc = dom.window.document;
     const divElem = doc.querySelector('div');
 
@@ -133,31 +144,29 @@ describe('ReactRenderer', () => {
         testParam: 1
       },
       component: () => new Promise(resolve =>
-        setTimeout(() => resolve(DummyComponent), 100)
+        setTimeout(() => resolve(DummyComponent), 600)
       )
     };
     myRenderer.setState(null, state);
 
-    jest.useFakeTimers();
+    jest.useFakeTimers({doNotFake: ['setInterval', 'clearInterval']});
     myRenderer.render();
     expect(divElem.innerHTML).toBeFalsy();
 
     jest.advanceTimersByTime(501);
-
+    await waitForComponent(divElem, '.bx--loading');
     expect(divElem.querySelector('.bx--loading')).toBeTruthy();
 
     jest.advanceTimersByTime(1000);
     jest.useRealTimers();
 
-    setImmediate(() => {
-      expect(divElem.querySelector('.sample-class')).toBeTruthy();
-      done();
-    });
+    await waitForComponent(divElem, '.sample-class');
+    expect(divElem.querySelector('.sample-class')).toBeTruthy();
   });
 
-  it('should attempt to render two components simultaneously', (done) => {
+  it('should attempt to render two components simultaneously', async () => {
     const dom = new JSDOM('<div></div>');
-    global.window ??= Object.create(dom.window);
+    global.window = dom.window;
     const doc = dom.window.document;
     const divElem = doc.querySelector('div');
 
@@ -167,40 +176,46 @@ describe('ReactRenderer', () => {
         testParam: 1
       },
       component: () => new Promise(resolve =>
-        setTimeout(() => resolve(DummyComponent), 100)
+        setTimeout(() => resolve(DummyComponent), 600)
       )
     };
     myRenderer.setState(null, state);
 
-    jest.useFakeTimers();
+    jest.useFakeTimers({doNotFake: ['setInterval', 'clearInterval']});
     myRenderer.render();
     expect(divElem.innerHTML).toBeFalsy();
 
     jest.advanceTimersByTime(501);
 
+    await waitForComponent(divElem, '.bx--loading');
     expect(divElem.querySelector('.bx--loading')).toBeTruthy();
 
     jest.advanceTimersByTime(1000);
+    jest.useRealTimers();
+    await waitForComponent(divElem, '.sample-class');
+    expect(divElem.querySelector('.sample-class')).toBeTruthy();
+
     const component2State = {
       params: {
         testParam: 1
       },
       component: () => new Promise(resolve =>
-        setTimeout(() => resolve(DummyComponentAlternate), 200)
+        setTimeout(() => resolve(DummyComponentAlternate), 1300)
       )
     };
     myRenderer.setState(null, component2State);
-    myRenderer.render();
 
+    jest.useFakeTimers({doNotFake: ['setInterval', 'clearInterval']});
+    myRenderer.render();
+    jest.advanceTimersByTime(501);
+    await waitForComponent(divElem, '.bx--loading');
     expect(divElem.querySelector('.bx--loading')).toBeTruthy();
 
     // Component 2 should render here and timeout 2 destroyed
-    jest.advanceTimersByTime(201);
+    jest.advanceTimersByTime(1000);
     jest.useRealTimers();
 
-    setImmediate(() => {
-      expect(divElem.querySelector('.sample-class__alternate')).toBeTruthy();
-      done();
-    });
+    await waitForComponent(divElem, '.sample-class__alternate');
+    expect(divElem.querySelector('.sample-class__alternate')).toBeTruthy();
   });
 });
